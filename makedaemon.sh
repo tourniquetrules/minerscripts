@@ -3,7 +3,7 @@
 # Prompt the user for the number of cores to use
 read -p "Enter the number of cores you want to use for building the crypto daemon: " cores
 ./autogen.sh
-chmod +x /contrib/install_db4.sh
+chmod +x contrib/install_db4.sh
 # Run the install_db4.sh script and capture its output
 db4_output=$(./contrib/install_db4.sh)
 
