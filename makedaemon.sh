@@ -10,7 +10,7 @@ if [[ "$cores" =~ ^[0-9]+$ && "$cores" -gt 0 ]]; then
     echo "Your make command is: $make_command"
 
     # Run the install_db4.sh script from the contrib directory and capture its output
-    db4_output=$(./contrib/install_db4.sh)
+    db4_output=$(./contrib/install_db4.sh `pwd`)
 
     # Extract the BDB_PREFIX value from the output
     BDB_PREFIX=$(echo "$db4_output" | grep -oP "export BDB_PREFIX='.*?'" | cut -d"'" -f2)
