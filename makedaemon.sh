@@ -2,22 +2,36 @@
 
 # Prompt the user for the number of cores to use
 read -p "Enter the number of cores you want to use for building the crypto daemon: " cores
+./autogen.sh
 chmod +x /contrib/install_db4.sh
-./contrib/install_db4.sh `pwd`
-export BDB_PREFIX='/root/medusa/Blockchain/db4'
+# Run the install_db4.sh script and capture its output
+db4_output=$(./contrib/install_db4.sh)
+
+# Extract the BDB_PREFIX value from the output
+BDB_PREFIX=$(echo "$db4_output" | grep -oP "export BDB_PREFIX='.*?'" | cut -d"'" -f2)
+
+# Extract the ./configure command (optional, if you want to use it directly)
+configure_command=$(echo "$db4_output" | grep './configure')
+
+# Check if BDB_PREFIX was successfully extracted
+if [[ -z "$BDB_PREFIX" ]]; then
+    echo "Failed to extract BDB_PREFIX from install_db4.sh output."
+    exit 1
+fi
+
+# Print the extracted BDB_PREFIX (for debugging purposes)
+echo "BDB_PREFIX extracted: $BDB_PREFIX"
+
+# Incorporate BDB_PREFIX into the configure command
+echo "Running ./configure with BDB settings..."
+./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" "$@"
+
 # Check if the input is a valid positive integer
 if [[ "$cores" =~ ^[0-9]+$ && "$cores" -gt 0 ]]; then
     # Construct and display the make command
     make_command="make -j$cores"
     echo "Your make command is: $make_command"
     
-    # Run the workflow commands
-    echo "Running ./autogen.sh..."
-    ./autogen.sh
-
-    echo "Running ./configure..."
-    ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_MMCAGS="-I${BDB_PREFIX}/include"
-
     echo "Running make command with $cores cores..."
     eval "$make_command"
 else
