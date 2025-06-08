@@ -63,10 +63,11 @@ cat > "$CONF_FILE" <<EOF
 server=1
 listen=1
 rpcport=$RPC_PORT
-rpcuser=x
-rpcpassword=abc123
+rpcuser=someuser
+rpcpassword=somepassword
 prune=550
 wallet=default
+fallbackfee=0.001
 EOF
 
 echo "✅ Created config at $CONF_FILE with rpcport=$RPC_PORT"
