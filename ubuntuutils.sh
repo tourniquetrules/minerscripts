@@ -1,0 +1,1 @@
+sudo apt install ncdu duff ripgrep lshw mtr fd-find fzf ranger zoxide exa glances iotop coreutils dstat watch progress dnsutils dog tcpdump tshark termshark lsof ipcalc magic-wormhole systemd procps procs lazydocker rsync moreutils ifupdown jq taskwarrior asciinema unp
